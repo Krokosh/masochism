@@ -54,9 +54,9 @@ actn: PRINT expr               {$$ = opr(PRINT, 1, $2); }
     | cond actn                {$$ = opr(IF, 2, $1, $2); }
     | WHILE cond actn          {$$ = opr(WHILE, 2, $2, $3); }
     | '{' actn_list '}'        {$$ = $2; }
-    | ':' expr actn            {$$=labels[ex($2)]=$3;}
+    | ':' expr actn            {$$=NULL;labels[ex($2)]=$3;}
     | JMP expr                 {$$=labels[ex($2)];}
-    | REF expr                 {parseNode($$=labels[ex($2)])}
+    | REF expr                 {$$=NULL;parseNode(labels[ex($2)])}
     ;
 
 actn_list: actn                  { $$ = $1; }
