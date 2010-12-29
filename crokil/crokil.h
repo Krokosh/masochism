@@ -1,3 +1,6 @@
+
+#define YYPARSE_PARAM ook
+
 typedef enum { typeCon, typeId, typeMem, typeOpr, typeLab } nodeEnum;
 
 /* constants */
@@ -44,11 +47,6 @@ extern int memory[1024];
 extern nodeType *labels[1024];
 
 int ex(nodeType *p);
-
-
-
-
-
 
 
 

@@ -12,14 +12,15 @@ crokil.o: crokil.c crokil.h
 
 crokilops.o: crokilops.c crokil.h
 
-crokil.tab.o: crokil.tab.c crokil.h crokil.tab.h crokil.y
+crokil.tab.o: crokil.tab.c crokil.h crokil.tab.h
 
 lex.yy.o: lex.yy.c crokil.h crokil.c
 
-.c.o: gcc -c
+%.o: %.c
+	$(CC) -c $(CFLAGS) $< -o $@
 
-crokil: lex.yy.o crokil.tab.o crokilops.o
-	gcc lex.yy.o crokil.tab.o crokilops.o -lfl -lm -o crokil
+crokil: lex.yy.o crokil.tab.o crokilops.o main.o
+	gcc $^ -lfl -lm -o crokil
 
 clean:
 	rm *.o lex.yy.c crokil.tab.c *~

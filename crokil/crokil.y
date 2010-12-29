@@ -254,27 +254,3 @@ void freeNode(nodeType *p) {
     free (p);
 }
 
-yyerror(s)
-char *s;
-{printf("%s\n",s);
-}
-
-main()
-{return yyparse();
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
