@@ -43,7 +43,7 @@ void parseNode(nodeType *p);
 comm: comm '\n'
     |
     | comm actn '\n'  {ex($2); /*freeNode($2);*/}
-    | comm error '\n' {yyerrok;printf("AARGH!  It's all broken!\n");}
+    | comm error '\n' {yyerrok;crokilout("AARGH!  It's all broken!\n");}
     ;
 
 actn: PRINT expr               {$$ = opr(PRINT, 1, $2); }
@@ -56,7 +56,7 @@ actn: PRINT expr               {$$ = opr(PRINT, 1, $2); }
     | '{' actn_list '}'        {$$ = $2; }
     | ':' expr actn            {$$=NULL;labels[ex($2)]=$3;}
     | JMP expr                 {$$=labels[ex($2)];}
-    | REF expr                 {$$=NULL;parseNode(labels[ex($2)])}
+    | REF expr                 {$$=NULL;parseNode(labels[ex($2)]);crokilout("\n");}
     ;
 
 actn_list: actn                  { $$ = $1; }
@@ -163,31 +163,32 @@ nodeType *opr(int oper, int nops, ...) {
 
 void parseNode(nodeType *p) {
   int i;
+  char szTemp[10];
   char op=',';
   if (!p) return;
   switch(p->type) 
     {	
     case typeOpr:
       if(p->opr.oper==';')
-	printf("{");
+	crokilout("{");
       else 
 	switch(p->opr.oper) {
 	case IF:        break;
-	case WHILE:     printf("@");break;
-	case PRINT:     printf("$");break;
-	case CMP:       printf("?");break;
-	case GE:        printf(">=");break;
-	case LE:        printf("=<");break;
-	case NE:        printf("!");break;
-	case EQ:        printf("==");break;
+	case WHILE:     crokilout("@");break;
+	case PRINT:     crokilout("$");break;
+	case CMP:       crokilout("?");break;
+	case GE:        crokilout(">=");break;
+	case LE:        crokilout("=<");break;
+	case NE:        crokilout("!");break;
+	case EQ:        crokilout("==");break;
 	case '=':       
 	  if(p->opr.op[0]->id.i<27)
-	    printf("=");
+	    crokilout("=");
 	  else
 	    {
-	      printf("?");
+	      crokilout("?");
 	      parseNode(p->opr.op[1]->opr.op[0]);
-	      printf(",");
+	      crokilout(",");
 	      parseNode(p->opr.op[1]->opr.op[1]);
 	      return;
 	    }
@@ -198,11 +199,11 @@ void parseNode(nodeType *p) {
 	{
 	  switch(p->opr.op[0]->opr.oper)
 	    {
-	    case GE:        printf(">=");break;
-	    case LE:        printf("=<");break;
-	    case NE:        printf("!");break;
-	    case EQ:        printf("==");break;
-	    default:        printf("%c",p->opr.op[0]->opr.oper);
+	    case GE:        crokilout(">=");break;
+	    case LE:        crokilout("=<");break;
+	    case NE:        crokilout("!");break;
+	    case EQ:        crokilout("==");break;
+	    default:        sprintf(szTemp,"%c",p->opr.op[0]->opr.oper);crokilout(szTemp);
 	    }
 	  parseNode(p->opr.op[1]);
 	}
@@ -210,7 +211,7 @@ void parseNode(nodeType *p) {
 	for (i = 0; i < p->opr.nops; i++)
 	  {
 	    if(i)
-	      printf(";");
+	      crokilout(";");
 	    parseNode(p->opr.op[i]);
 	  }
       else
@@ -219,26 +220,33 @@ void parseNode(nodeType *p) {
 	    {
 	      parseNode(p->opr.op[i]);
 	      if(i)
-		printf("%c",op);
+		{
+		  sprintf(szTemp,"%c",op);
+		  crokilout(szTemp);
+		}
 	    }  
 	  parseNode(p->opr.op[0]);
 
 	}
       if(p->opr.oper==';')
-	printf("}");
+	crokilout("}");
       break;
 
     case typeCon:
-      printf("%d", p->con.value);
+      sprintf(szTemp,"%d", p->con.value);
+      crokilout(szTemp);
       break;
     case typeId: 
-      printf("%c", p->id.i+'a');
+      sprintf(szTemp,"%c", p->id.i+'a');
+      crokilout(szTemp);
       break;
     case typeMem: 
-      printf("%d", memory[p->mem.i]);
+      sprintf(szTemp,"%d", memory[p->mem.i]);
+      crokilout(szTemp);
       break;
     case typeLab:  
-      printf("%d", ex(labels[p->lab.i]));
+      sprintf(szTemp,"%d", ex(labels[p->lab.i]));
+      crokilout(szTemp);
       break;
     }
 }

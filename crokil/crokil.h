@@ -47,6 +47,7 @@ extern int memory[1024];
 extern nodeType *labels[1024];
 
 int ex(nodeType *p);
+int crokilout(char *szString);
 
 
 

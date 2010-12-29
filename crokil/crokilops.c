@@ -2,7 +2,9 @@
 #include "crokil.h"
 #include "crokil.tab.h"
 
-int ex(nodeType *p) {
+int ex(nodeType *p) 
+{
+  char szTemp[10];
   if (!p) return 0;
   switch(p->type) {
   case typeCon:       return p->con.value;
@@ -17,7 +19,7 @@ int ex(nodeType *p) {
       ex(p->opr.op[2]);
       return 0;
     case WHILE:     while(ex(p->opr.op[0])) ex(p->opr.op[1]); return 0;
-    case PRINT:     printf("%d\n", ex(p->opr.op[0])); return 0;
+    case PRINT:     sprintf(szTemp,"%d\n", ex(p->opr.op[0]));crokilout(szTemp);return 0;
     case ':':       return ex(labels[p->opr.op[0]->lab.i]=p->opr.op[1]);
     case ';':       ex(p->opr.op[0]); return ex(p->opr.op[1]);
     case '=':       return sym[p->opr.op[0]->id.i] = ex(p->opr.op[1]);
@@ -34,7 +36,7 @@ int ex(nodeType *p) {
     case LE:        return ex(p->opr.op[0]) <= ex(p->opr.op[1]);
     case NE:        return ex(p->opr.op[0]) != ex(p->opr.op[1]);
     case EQ:        return ex(p->opr.op[0]) == ex(p->opr.op[1]);
-    default:        printf("What's %d?\n",p->opr.oper);
+    default:        sprintf(szTemp,"What's %d?\n",p->opr.oper);yyerror(szTemp);
     }
   }
 }

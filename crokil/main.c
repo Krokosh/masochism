@@ -6,19 +6,22 @@ char *s;
   printf("%s\n",s);
 }
 
+int crokilout(char *szString)
+{
+  printf(szString);
+}
+
 extern FILE *yyin;
 
 int main(int argc, char **argv)
 {
   int i;
-  FILE *fp;
   if(argc>1)
     for(i=1;i<argc;i++)
       {
-	fp=fopen (argv[i], "r");
-	yyin=fp;
+	yyin=fopen (argv[i], "r");
 	yyparse();
-	fclose(fp);
+	fclose(yyin);
       }
   else
     yyparse();
