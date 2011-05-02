@@ -1,6 +1,6 @@
 #!/bin/make
 
-all: crokil
+all: crokil #xcrokil
 
 lex.yy.c: crokil.l
 	flex crokil.l
@@ -20,6 +20,9 @@ lex.yy.o: lex.yy.c crokil.h crokil.c
 	$(CC) -c $(CFLAGS) $< -o $@
 
 crokil: lex.yy.o crokil.tab.o crokilops.o main.o
+	gcc $^ -lfl -lm -o crokil
+
+xcrokil: lex.yy.o crokil.tab.o crokilops.o xmain.o
 	gcc $^ -lfl -lm -o crokil
 
 clean:
