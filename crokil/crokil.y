@@ -27,7 +27,7 @@ void parseNode(nodeType *p);
 %token <iValue> NUMBER
 %token <sIndex> VARIABLE
 %token <aLabel> LABEL
-%token PRINT LET CMP LOAD SAVE IF WHILE LABEL JMP REF
+%token PRINT LET CMP LOAD SAVE IF WHILE JMP REF
 
 %right COMMA
 %token OPR CON
